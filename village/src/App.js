@@ -20,10 +20,19 @@ class App extends Component {
   componentDidMount() {
     axios 
       .get('http://localhost:3333/smurfs')
-      .then(res => {
-        this.setState({ smurfs: res.data });
-      })
-      .catch(err => console.log(err));
+      .then(res => this.setState({ smurfs: res.data }))
+      .catch(err => console.log('get smurf error', err));
+  }
+
+  addNewSmurf(smurfs) {
+    this.setState({ smurfs: smurfs });
+  }
+
+  deleteSmurf(id) {
+    axios
+      .delete(`http://localhost:3333/smurfs/${id}`)
+      .then(res => this.setState({ smurfs: res.data }))
+      .catch(err => console.log('delete smurf error', err));
   }
 
   render() {
@@ -39,12 +48,21 @@ class App extends Component {
         </ul>
         <Route exact path='/' 
           render={props => (
-            <Smurfs smurfs={this.state.smurfs} />
-          )} />
+            <Smurfs 
+              {...props}
+              smurfs={this.state.smurfs}
+              deleteSmurf={this.deleteSmurf}
+            />
+          )} 
+        />
         <Route path="/smurf-form"
           render={props => (
-            <SmurfForm {...props} callServer={this.callServer} />
-          )} />
+            <SmurfForm 
+              {...props} 
+              addNewSmurf={this.addNewSmurf} 
+            />
+          )} 
+        />
       </div>
     );
   }

@@ -23,7 +23,7 @@ class SmurfForm extends Component {
     axios
       .post('http://localhost:3333/smurfs', newSmurf)
       .then(res => this.setState({ smurfs: res.data }))
-      .catch(err => console.log(err));
+      .catch(err => console.log('add smurf error', err));
 
     this.setState({
       name: '',
